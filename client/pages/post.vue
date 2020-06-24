@@ -6,7 +6,7 @@
     <h2>Do you have an account?</h2>
     <div>
       <b-button variant="outline-primary" to="/auth/log-in">Log-in</b-button>
-      <b-button variant="outline-primary" to="/auth/sign-in"
+      <b-button variant="outline-primary" to="/auth/sign-up"
         >Create Account</b-button
       >
     </div>

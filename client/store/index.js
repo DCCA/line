@@ -8,6 +8,9 @@ export const mutations = {
   },
   setToken(state, token) {
     state.token = token;
+  },
+  resetAuth(state) {
+    (state.userId = null), (state.token = null);
   }
 };
 

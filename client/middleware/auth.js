@@ -1,9 +1,12 @@
 export default function({ store, redirect }) {
-  if (!isAuth()) {
-    return redirect("/auth/sign-in");
+  const token = store.state.token;
+  if (!token || !isAuth(token)) {
+    store.commit("resetAuth");
+    return redirect("/auth/sign-up");
   }
 }
-function isAuth() {
+async function isAuth(token) {
   // Check if user session exists somehow
-  return false;
+  const result = await fetch(`http://localhost:8000/api/v1/token/${token}`);
+  return result;
 }

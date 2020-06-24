@@ -19,8 +19,9 @@
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>Users</template>
-            <b-dropdown-item to="/pick-up">Pick-up</b-dropdown-item>
-            <b-dropdown-item to="/post">Post</b-dropdown-item>
+            <b-dropdown-item to="/auth/log-in">Log-in</b-dropdown-item>
+            <b-dropdown-item @click="logOut">Log-out</b-dropdown-item>
+            <b-dropdown-item to="/auth/sign-up">Sign-up</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -28,10 +29,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({});
+<script>
+export default {
+  methods: {
+    logOut() {
+      this.$store.commit("resetAuth");
+      this.$router.push({ path: "/" });
+    }
+  }
+};
 </script>
 
 <style scoped></style>

@@ -16,6 +16,7 @@ router.post(
   ],
   authController.postLogin
 );
+
 router.post(
   '/sign-up',
   [
@@ -36,5 +37,7 @@ router.post(
   ],
   authController.postSignup
 );
+
+router.get('/token/:token', authController.getToken);
 
 export default router;

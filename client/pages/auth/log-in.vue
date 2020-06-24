@@ -54,6 +54,7 @@ export default {
       evt.preventDefault();
       try {
         const response = await this.$store.dispatch("logIn", this.form);
+        this.$router.push({ path: "/account/poster/" });
       } catch (error) {
         if (error.errors) {
           this.errors = error.errors;
