@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -36,15 +38,32 @@ export default {
         email: "",
         password: ""
       },
-      show: true
+      show: true,
+      errors: null
     };
   },
+  computed: {
+    ...mapState({
+      userId: state => state.userId,
+      token: state => state.token
+    })
+  },
   methods: {
-    onSubmit(evt) {
+    async onSubmit(evt) {
+      this.errors = null;
       evt.preventDefault();
-      alert(JSON.stringify(this.form));
+      try {
+        const response = await this.$store.dispatch("logIn", this.form);
+      } catch (error) {
+        if (error.errors) {
+          this.errors = error.errors;
+        } else {
+          this.errors = [error];
+        }
+      }
     },
     onReset(evt) {
+      this.errors = null;
       evt.preventDefault();
       // Reset our form values
       this.form.email = "";

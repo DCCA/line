@@ -1,21 +1,51 @@
 export const state = () => {
+  userId: null;
   token: null;
 };
 export const mutations = {
+  setUserId(state, userId) {
+    state.userId = userId;
+  },
   setToken(state, token) {
     state.token = token;
   }
 };
+
+const apiUrl = "http://localhost:8000/api/v1/";
+
 export const actions = {
+  async logIn({ commit }, payload) {
+    const { email, password } = payload;
+    try {
+      const response = await fetch(`${apiUrl}/login`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
+      // Check response
+      const data = await response.json();
+      if (response.status === 200) {
+        commit("setUserId", data.userId);
+        commit("setToken", data.token);
+        return Promise.resolve(data);
+      }
+      return Promise.reject(data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+  // Sign Up
   async signUp(context, payload) {
-    console.log("Got here!");
     const { name, email, password } = payload;
 
-    const apiUrl = "http://localhost:8000/api/v1/sign-up";
-    // const apiUrl = "https://google.com";
     // Make the api request
     try {
-      const response = await fetch(apiUrl, {
+      const response = await fetch(`${apiUrl}/sign-up`, {
         method: "post",
         headers: {
           "Content-Type": "application/json"
@@ -29,9 +59,8 @@ export const actions = {
       // Check the response
       const data = await response.json();
       if (response.status === 201) {
-        const { token } = data;
-        context.commit("setToken", token);
-        return Promise.resolve(token);
+        const userId = data._id;
+        return Promise.resolve(userId);
       }
       return Promise.reject(data);
     } catch (error) {

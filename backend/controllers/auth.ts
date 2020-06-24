@@ -33,7 +33,7 @@ export const postLogin = async (
     //   Give a JWT
     const token = jwt.sign({ userId: user._id }, secret);
     //   Log-in the user
-    return res.status(200).json({ token });
+    return res.status(200).json({ token, userId: user._id });
   } catch (error) {
     console.log(error);
     throw new Error('Something went wrong with DB');

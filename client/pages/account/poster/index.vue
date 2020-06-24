@@ -7,9 +7,7 @@
         <nuxt-link to="/account/poster/create-post">Post a new item</nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/account/poster/edit-items"
-          >Edit a existing item</nuxt-link
-        >
+        <nuxt-link to="/account/poster/edit-items">Edit a existing item</nuxt-link>
       </li>
     </ul>
     <h2>Calendar</h2>
@@ -24,12 +22,12 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 
-export default Vue.extend({
+export default {
   data() {
     return {
       events: [
@@ -48,8 +46,9 @@ export default Vue.extend({
   },
   components: {
     VueCal
-  }
-});
+  },
+  middleware: "auth"
+};
 </script>
 
 <style scoped></style>

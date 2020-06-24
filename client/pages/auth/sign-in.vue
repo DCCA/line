@@ -3,19 +3,10 @@
     <h1>Create an Account</h1>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-form-group id="input-group-2" label="Your name:" label-for="input-2">
-        <b-form-input
-          id="input-2"
-          v-model="form.name"
-          required
-          placeholder="Enter name"
-        ></b-form-input>
+        <b-form-input id="input-2" v-model="form.name" required placeholder="Enter name"></b-form-input>
       </b-form-group>
 
-      <b-form-group
-        id="input-group-1"
-        label="Email address:"
-        label-for="input-1"
-      >
+      <b-form-group id="input-group-1" label="Email address:" label-for="input-1">
         <b-form-input
           id="input-1"
           v-model="form.email"
@@ -25,11 +16,7 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group
-        id="input-group-3"
-        label="Your password:"
-        label-for="input-3"
-      >
+      <b-form-group id="input-group-3" label="Your password:" label-for="input-3">
         <b-form-input
           id="input-3"
           v-model="form.password"
@@ -46,6 +33,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -57,6 +46,12 @@ export default {
       show: true,
       errors: null
     };
+  },
+  computed: {
+    ...mapState({
+      userId: state => state.userId,
+      token: state => state.token
+    })
   },
   methods: {
     async onSubmit(evt) {
@@ -76,6 +71,7 @@ export default {
       }
     },
     onReset(evt) {
+      this.errors = null;
       evt.preventDefault();
       // Reset our form values
       this.form.email = "";
