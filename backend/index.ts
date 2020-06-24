@@ -4,10 +4,13 @@ import express, {
   Response,
   NextFunction,
 } from 'express';
+import { json } from 'body-parser';
 import 'express-async-errors';
 import helmet from 'helmet';
-import cors from 'cors';
+// import cors from 'cors';
 import morgan from 'morgan';
+// Import routes
+import authRoutes from './routes/auth';
 // Start config vars
 import dotenv from 'dotenv';
 dotenv.config();
@@ -19,13 +22,23 @@ import db from './util/dbConnection';
 const app = express();
 
 // Config app
-app.use(express.json());
-app.use(cors());
+app.use(json());
 app.use(helmet());
 app.use(morgan('tiny'));
-
-// Import routes
-import authRoutes from './routes/auth';
+// app.use(cors());
+// Fix cors
+app.use((req, res, next) => {
+  // Set domains
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Set the methods
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, PATCH, DELETE'
+  );
+  //
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 // Routes
 app.use('/api/v1', authRoutes);

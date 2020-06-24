@@ -22,8 +22,8 @@ router.post(
     body('email')
       .isEmail()
       .withMessage('Use a valid email')
-      .custom(async (value) => {
-        const emailTaken = User.findOne({ value });
+      .custom(async (email) => {
+        const emailTaken = await User.findOne({ email });
         if (emailTaken) {
           return Promise.reject('E-mail already in use');
         }
