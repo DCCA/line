@@ -14,13 +14,13 @@ export const mutations = {
   }
 };
 
-const apiUrl = "http://localhost:8000/api/v1/";
+const apiAuthUrl = "http://localhost:8000/api/v1/auth";
 
 export const actions = {
   async logIn({ commit }, payload) {
     const { email, password } = payload;
     try {
-      const response = await fetch(`${apiUrl}/login`, {
+      const response = await fetch(`${apiAuthUrl}/login`, {
         method: "post",
         headers: {
           "Content-Type": "application/json"
@@ -48,7 +48,7 @@ export const actions = {
 
     // Make the api request
     try {
-      const response = await fetch(`${apiUrl}/sign-up`, {
+      const response = await fetch(`${apiAuthUrl}/sign-up`, {
         method: "post",
         headers: {
           "Content-Type": "application/json"

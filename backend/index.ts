@@ -11,6 +11,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 // Import routes
 import authRoutes from './routes/auth';
+import postRoutes from './routes/post';
 // Start config vars
 import dotenv from 'dotenv';
 dotenv.config();
@@ -41,9 +42,10 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/v1', authRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/post', postRoutes);
 app.use('*', (req, res, next) => {
-  res.send('Ok!');
+  res.status(404).send('Not found!');
 });
 // Error Handling
 app.use(

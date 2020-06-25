@@ -2,6 +2,7 @@ import express from 'express';
 import { body } from 'express-validator';
 import * as authController from '../controllers/auth';
 import User from '../models/user';
+import { validationRes } from '../middleware/validation';
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router.post(
       .isLength({ min: 5 })
       .withMessage('Use a password with more then 5 characters'),
   ],
+  validationRes,
   authController.postLogin
 );
 
@@ -35,6 +37,7 @@ router.post(
       .isLength({ min: 5 })
       .withMessage('Use a password with more then 5 characters'),
   ],
+  validationRes,
   authController.postSignup
 );
 
