@@ -3,6 +3,7 @@ import * as postController from '../controllers/post';
 import { body } from 'express-validator';
 import { validationRes } from '../middleware/validation';
 import { isAuth } from '../middleware/isAuth';
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.post(
 );
 
 // Get all items
-router.get('');
+router.get('/items', isAuth, postController.getItems);
 
 // Get specific item
 

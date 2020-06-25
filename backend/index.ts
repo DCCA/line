@@ -55,8 +55,7 @@ app.use(
     res: Response,
     next: NextFunction
   ) => {
-    console.log(err);
-    return res.status(500).json(err);
+    return res.status(500).json(err.toString());
   }
 );
 
