@@ -1,10 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
 import Item from '../models/item';
 import User from '../models/user';
-import item from '../models/item';
-
-const secret = process.env.SECRET || 'secret';
 
 export const postCreateItem = async (
   req: Request,
@@ -48,5 +44,38 @@ export const getItems = async (
   } catch (error) {
     console.log(error);
     throw new Error('Something went wrong in the server');
+  }
+};
+
+export const deleteItem = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.userId;
+    const itemId = req.params.itemId;
+    if (!itemId || !userId) {
+      return res.status(404).json('Bad item id or user id');
+    }
+    const item = await Item.findById(itemId);
+    const user = await User.findById(userId);
+    if (!item || !user) {
+      return res.status(404).json('User or item not found');
+    }
+    // Get item index
+    const itemIndex = user.items.findIndex(
+      (val) => val.toString() === item._id.toString()
+    );
+    // Remove item
+    user.items.splice(itemIndex!);
+    // Save user
+    // user.items = newItems;
+    await user.save();
+    await item.remove();
+    return res.status(200).json(`Delete item: ${item}`);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
   }
 };

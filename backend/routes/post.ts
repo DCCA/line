@@ -3,7 +3,6 @@ import * as postController from '../controllers/post';
 import { body } from 'express-validator';
 import { validationRes } from '../middleware/validation';
 import { isAuth } from '../middleware/isAuth';
-import User from '../models/user';
 
 const router = express.Router();
 
@@ -24,10 +23,11 @@ router.post(
 // Get all items
 router.get('/items', isAuth, postController.getItems);
 
+// Delete item
+router.delete('/delete-item/:itemId', isAuth, postController.deleteItem);
+
 // Get specific item
 
 // Edit item
-
-// Delete item
 
 export default router;
