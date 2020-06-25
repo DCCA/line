@@ -111,11 +111,31 @@ export const actions = {
           Authorization: `Bearer ${state.token}`
         }
       });
-      const items = await response.json();
+      const data = await response.json();
       if (response.status === 200) {
-        commit("setItems", items);
-        return Promise.resolve(items);
+        commit("setItems", data);
+        return Promise.resolve(data);
       }
+      return Promise.reject(data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+
+  // Delete items
+  async deleteItem({ state }, itemId) {
+    try {
+      const response = await fetch(`${apiPostUrl}/delete-item/${itemId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${state.token}`
+        }
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        return Promise.resolve(data);
+      }
+      return Promise.reject(data);
     } catch (error) {
       return Promise.reject(error);
     }

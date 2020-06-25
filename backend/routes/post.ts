@@ -11,8 +11,14 @@ router.post(
   '/create-item',
   isAuth,
   [
-    body('itemName').notEmpty().withMessage('Please insert a item name'),
-    body('pickerName').notEmpty().withMessage('Please insert the picker name'),
+    body('itemName')
+      .notEmpty()
+      .isLength({ min: 5 })
+      .withMessage('Please insert a item name with min of 5 chars'),
+    body('pickerName')
+      .notEmpty()
+      .isLength({ min: 5 })
+      .withMessage('Please insert the picker name with a min of 5 chars'),
     body('pickerEmail').isEmail().withMessage('Please insert a valid e-mail'),
     body('pickUpDate').isISO8601().withMessage('Please insert a valid date'),
   ],

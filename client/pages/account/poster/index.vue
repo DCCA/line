@@ -8,6 +8,14 @@
       </li>
     </ul>
     <h2>Posted Items</h2>
+    <b-spinner v-if="loadingCards" label="Spinning"></b-spinner>
+    <b-alert
+      v-model="show"
+      v-for="error in errors"
+      variant="danger"
+      class="mt-3"
+      :key="error"
+    >{{error.msg}}</b-alert>
     <b-card v-for="item in items" :key="item._id" :title="item.name" class="my-3">
       <b-card-text>
         <p>
@@ -33,7 +41,7 @@
           {{item.states}}
         </p>
       </b-card-text>
-      <b-link href="#" class="card-link">DELETE</b-link>
+      <b-link class="card-link" @click.prevent="deleteItem(item._id)">DELETE</b-link>
     </b-card>
   </div>
 </template>
@@ -42,7 +50,12 @@
 import { mapState } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      cardErrors: null,
+      loadingCards: false,
+      errors: null,
+      show: true
+    };
   },
   computed: {
     ...mapState({
@@ -52,10 +65,26 @@ export default {
   middleware: "auth",
   methods: {
     async getItems() {
-      this.$store.dispatch("getItems");
+      this.loadingCards = true;
+      await this.$store.dispatch("getItems");
+      this.loadingCards = false;
+    },
+    async deleteItem(itemId) {
+      this.errors = null;
+      try {
+        await this.$store.dispatch("deleteItem", itemId);
+      } catch (error) {
+        if (error.errors) {
+          this.errors = error.errors;
+        } else {
+          this.errors = [{ msg: error }];
+        }
+      }
     }
   },
   beforeMount() {
+    this.errors = null;
+    this.$store.commit("resetItems");
     this.getItems();
   }
 };
