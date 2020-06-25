@@ -25,6 +25,13 @@
       <b-button type="submit" variant="primary">Log-in</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
+    <b-alert
+      v-model="show"
+      v-for="error in errors"
+      variant="danger"
+      class="mt-3"
+      :key="error"
+    >{{error.msg}}</b-alert>
   </div>
 </template>
 
@@ -59,7 +66,7 @@ export default {
         if (error.errors) {
           this.errors = error.errors;
         } else {
-          this.errors = [error];
+          this.errors = [{ msg: error }];
         }
       }
     },

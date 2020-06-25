@@ -19,9 +19,11 @@
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>Users</template>
-            <b-dropdown-item to="/auth/log-in">Log-in</b-dropdown-item>
-            <b-dropdown-item @click="logOut">Log-out</b-dropdown-item>
-            <b-dropdown-item to="/auth/sign-up">Sign-up</b-dropdown-item>
+            <template v-if="!userId">
+              <b-dropdown-item to="/auth/log-in">Log-in</b-dropdown-item>
+              <b-dropdown-item to="/auth/sign-up">Sign-up</b-dropdown-item>
+            </template>
+            <b-dropdown-item v-if="userId" @click="logOut">Log-out</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -30,7 +32,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
+  computed: {
+    ...mapState({
+      userId: state => state.userId
+    })
+  },
   methods: {
     logOut() {
       this.$store.commit("resetAuth");
