@@ -73,6 +73,7 @@ export default {
   methods: {
     async onSubmit(evt) {
       this.errors = null;
+      this.success = null;
       evt.preventDefault();
       // Dispatch action
       try {
@@ -109,6 +110,8 @@ export default {
       }
     },
     onReset(evt) {
+      this.errors = null;
+      this.success = null;
       evt.preventDefault();
       // Reset our form values
       this.form.itemName = "";

@@ -1,6 +1,7 @@
 export const state = () => {
   userId: null;
   token: null;
+  items: null;
 };
 export const mutations = {
   setUserId(state, userId) {
@@ -11,6 +12,12 @@ export const mutations = {
   },
   resetAuth(state) {
     (state.userId = null), (state.token = null);
+  },
+  setItems(state, items) {
+    state.items = items;
+  },
+  resetItems(state) {
+    state.items = null;
   }
 };
 
@@ -74,7 +81,7 @@ export const actions = {
     }
   },
 
-  // Post Item
+  // Create a new item
   async createItem({ state, commit }, payload) {
     try {
       const response = await fetch(`${apiPostUrl}/create-item`, {
@@ -90,6 +97,25 @@ export const actions = {
         return Promise.resolve(data);
       }
       return Promise.reject(data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+
+  // Get items from user
+  async getItems({ state, commit }) {
+    try {
+      const response = await fetch(`${apiPostUrl}/items`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${state.token}`
+        }
+      });
+      const items = await response.json();
+      if (response.status === 200) {
+        commit("setItems", items);
+        return Promise.resolve(items);
+      }
     } catch (error) {
       return Promise.reject(error);
     }

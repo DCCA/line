@@ -6,48 +6,58 @@
       <li>
         <nuxt-link to="/account/poster/create-post">Post a new item</nuxt-link>
       </li>
-      <li>
-        <nuxt-link to="/account/poster/edit-items">Edit a existing item</nuxt-link>
-      </li>
     </ul>
-    <h2>Calendar</h2>
-    <vue-cal
-      :time-from="9 * 60"
-      :time-to="18 * 60"
-      :time-step="30"
-      :disable-views="['years', 'year', 'month']"
-      hide-weekends
-      :events="events"
-    />
+    <h2>Posted Items</h2>
+    <b-card v-for="item in items" :key="item._id" :title="item.name" class="my-3">
+      <b-card-text>
+        <p>
+          <span class="font-weight-bold">Picker Name:</span>
+          {{item.pickerName}}
+        </p>
+      </b-card-text>
+      <b-card-text>
+        <p>
+          <span class="font-weight-bold">Picker E-mail:</span>
+          {{item.pickerEmail}}
+        </p>
+      </b-card-text>
+      <b-card-text>
+        <p>
+          <span class="font-weight-bold">Pick Up Date:</span>
+          {{item.pickUpDate}}
+        </p>
+      </b-card-text>
+      <b-card-text>
+        <p>
+          <span class="font-weight-bold">Status:</span>
+          {{item.states}}
+        </p>
+      </b-card-text>
+      <b-link href="#" class="card-link">DELETE</b-link>
+    </b-card>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
-import VueCal from "vue-cal";
-import "vue-cal/dist/vuecal.css";
-
+import { mapState } from "vuex";
 export default {
   data() {
-    return {
-      events: [
-        {
-          start: "2020-06-23 10:30",
-          end: "2020-06-23 11:30",
-          // You can also define event dates with Javascript Date objects:
-          // start: new Date(2018, 11 - 1, 16, 10, 30),
-          // end: new Date(2018, 11 - 1, 16, 11, 30),
-          title: "Doctor appointment",
-          content: '<i class="v-icon material-icons">local_hospital</i>',
-          class: "health"
-        }
-      ]
-    };
+    return {};
   },
-  components: {
-    VueCal
+  computed: {
+    ...mapState({
+      items: state => state.items
+    })
   },
-  middleware: "auth"
+  middleware: "auth",
+  methods: {
+    async getItems() {
+      this.$store.dispatch("getItems");
+    }
+  },
+  beforeMount() {
+    this.getItems();
+  }
 };
 </script>
 
