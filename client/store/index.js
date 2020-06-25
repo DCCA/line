@@ -15,8 +15,10 @@ export const mutations = {
 };
 
 const apiAuthUrl = "http://localhost:8000/api/v1/auth";
+const apiPostUrl = "http://localhost:8000/api/v1/post";
 
 export const actions = {
+  // Log In
   async logIn({ commit }, payload) {
     const { email, password } = payload;
     try {
@@ -42,6 +44,7 @@ export const actions = {
       return Promise.reject(error);
     }
   },
+
   // Sign Up
   async signUp(context, payload) {
     const { name, email, password } = payload;
@@ -64,6 +67,27 @@ export const actions = {
       if (response.status === 201) {
         const userId = data._id;
         return Promise.resolve(userId);
+      }
+      return Promise.reject(data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+
+  // Post Item
+  async createItem({ state, commit }, payload) {
+    try {
+      const response = await fetch(`${apiPostUrl}/create-item`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${state.token}`
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (response.status === 201) {
+        return Promise.resolve(data);
       }
       return Promise.reject(data);
     } catch (error) {
