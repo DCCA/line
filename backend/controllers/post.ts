@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import Item from '../models/item';
 import User from '../models/user';
+import dotenv from 'dotenv';
+dotenv.config();
+const apiKey = process.env.SENDGRID_API_KEY;
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(apiKey);
 
 export const postCreateItem = async (
   req: Request,
@@ -24,6 +29,13 @@ export const postCreateItem = async (
     });
     const savedItem = await item.save();
     user.items.push(savedItem._id);
+    const msg = {
+      to: pickerEmail,
+      from: 'dcca12@gmail.com',
+      subject: `You need to get the item: ${item.name}`,
+      text: `You have been selected to the get the item ${item.name} on the following date ${item.pickUpDate}:`,
+    };
+    sgMail.send(msg);
     await user.save();
     return res.status(201).json(savedItem._id);
   } catch (error) {

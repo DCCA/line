@@ -6,8 +6,6 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config;
 
-const secret = process.env.SECRET || 'secret';
-
 export const postSignup = async (
   req: Request,
   res: Response,
@@ -59,12 +57,12 @@ export const postLogin = async (
       return res.status(404).json('Password is wrong');
     }
     //   Give a JWT
-    const token = jwt.sign({ userId: user._id }, secret);
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET!);
     //   Log-in the user
     return res.status(200).json({ token, userId: user._id });
   } catch (error) {
     console.log(error);
-    throw new Error('Something went wrong with DB');
+    throw new Error(error);
   }
 };
 
@@ -75,7 +73,7 @@ export const getToken = async (
 ) => {
   const token = req.params.token;
   // Verify token
-  const isValid = await jwt.verify(token, secret);
+  const isValid = await jwt.verify(token, process.env.SECRET!);
   if (!isValid) {
     return res.json(false);
   }

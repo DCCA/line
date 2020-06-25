@@ -15,33 +15,41 @@
       variant="danger"
       class="mt-3"
       :key="error"
-    >{{error.msg}}</b-alert>
-    <b-card v-for="item in items" :key="item._id" :title="item.name" class="my-3">
+      >{{ error.msg }}</b-alert
+    >
+    <b-card
+      v-for="item in items"
+      :key="item._id"
+      :title="item.name"
+      class="my-3"
+    >
       <b-card-text>
         <p>
           <span class="font-weight-bold">Picker Name:</span>
-          {{item.pickerName}}
+          {{ item.pickerName }}
         </p>
       </b-card-text>
       <b-card-text>
         <p>
           <span class="font-weight-bold">Picker E-mail:</span>
-          {{item.pickerEmail}}
+          {{ item.pickerEmail }}
         </p>
       </b-card-text>
       <b-card-text>
         <p>
           <span class="font-weight-bold">Pick Up Date:</span>
-          {{item.pickUpDate}}
+          {{ item.pickUpDate }}
         </p>
       </b-card-text>
       <b-card-text>
         <p>
           <span class="font-weight-bold">Status:</span>
-          {{item.states}}
+          {{ item.states }}
         </p>
       </b-card-text>
-      <b-link class="card-link" @click.prevent="deleteItem(item._id)">DELETE</b-link>
+      <b-link class="card-link" @click.prevent="deleteItem(item._id)"
+        >DELETE</b-link
+      >
     </b-card>
   </div>
 </template>
@@ -84,7 +92,6 @@ export default {
   },
   beforeMount() {
     this.errors = null;
-    this.$store.commit("resetItems");
     this.getItems();
   }
 };
