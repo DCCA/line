@@ -11,7 +11,11 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="picker-name" label="Picker name:" label-for="picker-name">
+      <b-form-group
+        id="picker-name"
+        label="Picker name:"
+        label-for="picker-name"
+      >
         <b-form-input
           id="picker-name"
           v-model="form.pickerName"
@@ -21,7 +25,11 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="picker-email" label="Picker email:" label-for="picker-email">
+      <b-form-group
+        id="picker-email"
+        label="Picker email:"
+        label-for="picker-email"
+      >
         <b-form-input
           id="picker-email"
           v-model="form.pickerEmail"
@@ -33,7 +41,11 @@
 
       <b-form-group>
         <label for="datepicker">Choose a date for the pick-up</label>
-        <b-form-datepicker id="datepicker" v-model="form.date" class="mb-2"></b-form-datepicker>
+        <b-form-datepicker
+          id="datepicker"
+          v-model="form.date"
+          class="mb-2"
+        ></b-form-datepicker>
       </b-form-group>
 
       <b-form-group label="Choose a time for the pick-up">
@@ -49,8 +61,11 @@
       variant="danger"
       class="mt-3"
       :key="error"
-    >{{error.msg}}</b-alert>
-    <b-alert v-model="show" v-if="success" variant="success" class="mt-3">{{this.success}}</b-alert>
+      >{{ error.msg }}</b-alert
+    >
+    <b-alert v-model="show" v-if="success" variant="success" class="mt-3">{{
+      this.success
+    }}</b-alert>
   </div>
 </template>
 
@@ -101,6 +116,13 @@ export default {
         };
         const response = await this.$store.dispatch("createItem", payload);
         this.success = `Item #${response} created!`;
+        this.form = {
+          itemName: "",
+          pickerName: "",
+          pickerEmail: "",
+          date: "",
+          time: ""
+        };
       } catch (error) {
         if (error.errors) {
           this.errors = error.errors;

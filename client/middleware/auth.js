@@ -2,7 +2,7 @@ export default function({ store, redirect }) {
   const token = store.state.token;
   if (!token || !isAuth(token)) {
     store.commit("resetAuth");
-    return redirect("/auth/sign-up");
+    return redirect("/auth/log-in");
   }
 }
 async function isAuth(token) {

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Item from '../models/item';
 import User from '../models/user';
+import moment from 'moment';
 import dotenv from 'dotenv';
 dotenv.config();
 const apiKey = process.env.SENDGRID_API_KEY;
@@ -39,10 +40,9 @@ export const postCreateItem = async (
         <p>You have been selected to the get:</p>
         <ul>
           <li>Item: ${item.name}</li>
-          <li>Pick Up Date: ${item.pickUpDate}</li>
+          <li>Pick Up Date: ${moment(item.pickUpDate).format('LLLL')}</li>
         </ul>
-        <a href='http://localhost:3000'>Confirm</a>
-        <a href='http://localhost:3000' >Change Date</a>
+        <a href='http://localhost:3000/account/picker'>Check Your Items</a>
         `,
     };
     sgMail.send(msg);
@@ -96,6 +96,26 @@ export const deleteItem = async (
     await user.save();
     await item.remove();
     return res.status(200).json(`Delete item: ${item}`);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+export const postPickerItems = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { pickerEmail } = req.body;
+  console.log(req.body);
+
+  try {
+    const items = await Item.find({ pickerEmail });
+    if (!items || items.length < 1) {
+      return res.status(404).json('No item found');
+    }
+    return res.status(200).json(items);
   } catch (error) {
     console.log(error);
     throw new Error(error);

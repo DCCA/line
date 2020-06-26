@@ -2,6 +2,7 @@ export const state = () => {
   userId: null;
   token: null;
   items: null;
+  pickerItems: null;
 };
 export const mutations = {
   setUserId(state, userId) {
@@ -18,6 +19,12 @@ export const mutations = {
   },
   resetItems(state) {
     state.items = null;
+  },
+  setPickerItems(state, pickerItems) {
+    state.pickerItems = pickerItems;
+  },
+  resetPickerItems(state) {
+    state.pickerItems = null;
   }
 };
 
@@ -133,6 +140,32 @@ export const actions = {
       });
       const data = await response.json();
       if (response.status === 200) {
+        return Promise.resolve(data);
+      }
+      return Promise.reject(data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+
+  // Get picker items
+  async getPickerItems({ commit }, payload) {
+    const pickerEmail = payload;
+    try {
+      const response = await fetch(`${apiPostUrl}/picker-items`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          pickerEmail
+        })
+      });
+      console.log(JSON.stringify({ pickerEmail }));
+      const data = await response.json();
+      console.log(data);
+      if (response.status === 200) {
+        commit("setPickerItems", data);
         return Promise.resolve(data);
       }
       return Promise.reject(data);

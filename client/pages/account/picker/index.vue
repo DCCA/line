@@ -2,11 +2,7 @@
   <div>
     <h1>Picker Area</h1>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-      <b-form-group
-        id="input-group-1"
-        label="Email address:"
-        label-for="input-1"
-      >
+      <b-form-group id="input-group-1" label="Email address:" label-for="input-1">
         <b-form-input
           id="input-1"
           v-model="form.email"
@@ -25,13 +21,30 @@
       variant="danger"
       class="mt-3"
       :key="error"
-      >{{ error.msg }}</b-alert
-    >
+    >{{ error.msg }}</b-alert>
+    <b-spinner v-if="loading" label="Spinning"></b-spinner>
+    <table class="my-3 table">
+      <tr class="font-weight-bold">
+        <td>Item:</td>
+        <td>Picker Email:</td>
+        <td>Pick Up Date:</td>
+        <td>Created At:</td>
+        <td>Status:</td>
+      </tr>
+      <tr v-for="item in pickerItemsList" :key="item.name">
+        <td>{{ item.name }}</td>
+        <td>{{ item.pickerEmail }}</td>
+        <td>{{ formatDate(item.pickUpDate) }}</td>
+        <td>{{ formatDate(item.created_at) }}</td>
+        <td>{{ item.states }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import moment from "moment";
 
 export default {
   data() {
@@ -39,15 +52,31 @@ export default {
       form: {
         email: ""
       },
-      show: true
+      show: true,
+      errors: null,
+      loading: false,
+      pickerItemsList: null
     };
   },
+  computed: mapState(["pickerItems"]),
   methods: {
     async onSubmit(evt) {
       this.errors = null;
+      this.loading = true;
       evt.preventDefault();
-      // Search for items with that e-mail
-      // Return the items so the user can confirm or reject
+      const pickerEmail = this.form.email;
+      try {
+        await this.$store.dispatch("getPickerItems", pickerEmail);
+        this.pickerItemsList = this.pickerItems;
+      } catch (error) {
+        this.pickerItemsList = null;
+        if (error.errors) {
+          this.errors = error.errors;
+        } else {
+          this.errors = [{ msg: error }];
+        }
+      }
+      this.loading = false;
     },
     onReset(evt) {
       this.errors = null;
@@ -60,7 +89,16 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
+    },
+    formatDate(date) {
+      return moment(date).format("MMM, d, H:mm");
     }
   }
 };
 </script>
+
+<style scoped>
+table {
+  width: 100%;
+}
+</style>

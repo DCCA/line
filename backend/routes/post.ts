@@ -33,6 +33,12 @@ router.get('/items', isAuth, postController.getItems);
 router.delete('/delete-item/:itemId', isAuth, postController.deleteItem);
 
 // Get specific item
+router.post(
+  '/picker-items',
+  // [body('pickerEmail').isEmail().withMessage('Please use a valid e-mail')],
+  // validationRes,
+  postController.postPickerItems
+);
 
 // Edit item
 
