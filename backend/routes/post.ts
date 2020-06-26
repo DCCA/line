@@ -40,6 +40,7 @@ router.post(
   postController.postPickerItems
 );
 
-// Edit item
+// Picked up status
+router.get('/picked-item/:itemId', postController.getPickedItem);
 
 export default router;

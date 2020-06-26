@@ -172,5 +172,20 @@ export const actions = {
     } catch (error) {
       return Promise.reject(error);
     }
+  },
+
+  // Picked up item status
+  async pickItem({}, payload) {
+    const itemId = payload;
+    try {
+      const response = await fetch(`${apiPostUrl}/picked-item/${itemId}`);
+      const data = await response.json();
+      if (response.status === 200) {
+        return Promise.resolve(data);
+      }
+      return Promise.reject(data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 };

@@ -19,7 +19,7 @@ interface IItem extends mongoose.Document {
   pickerName: string;
   pickerEmail: string;
   pickUpDate: Date;
-  status: string;
+  states: string;
   userId: string;
 }
 

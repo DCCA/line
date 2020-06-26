@@ -121,3 +121,26 @@ export const postPickerItems = async (
     throw new Error(error);
   }
 };
+
+export const getPickedItem = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const itemId = req.params.itemId;
+    if (!itemId) {
+      return res.status(404).json('No item ID');
+    }
+    const item = await Item.findById(itemId);
+    if (!item) {
+      return res.status(404).json('No item found');
+    }
+    item.states = 'picked';
+    await item.save();
+    return res.status(200).json(item);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};

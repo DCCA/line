@@ -30,6 +30,7 @@
         <td>Pick Up Date:</td>
         <td>Created At:</td>
         <td>Status:</td>
+        <td>Actions:</td>
       </tr>
       <tr v-for="item in pickerItemsList" :key="item.name">
         <td>{{ item.name }}</td>
@@ -37,6 +38,15 @@
         <td>{{ formatDate(item.pickUpDate) }}</td>
         <td>{{ formatDate(item.created_at) }}</td>
         <td>{{ item.states }}</td>
+        <td>
+          <b-button-group vertical>
+            <b-button
+              variant="success"
+              @click.prevent="pickItem(item._id)"
+              :disabled="isPicked(item.states)"
+            >Picked</b-button>
+          </b-button-group>
+        </td>
       </tr>
     </table>
   </div>
@@ -92,6 +102,23 @@ export default {
     },
     formatDate(date) {
       return moment(date).format("MMM, d, H:mm");
+    },
+    async pickItem(itemId) {
+      try {
+        await this.$store.dispatch("pickItem", itemId);
+      } catch (error) {
+        if (error.errors) {
+          this.errors = error.errors;
+        } else {
+          this.errors = [{ msg: error }];
+        }
+      }
+    },
+    isPicked(status) {
+      if (status === "picked") {
+        return true;
+      }
+      return false;
     }
   }
 };

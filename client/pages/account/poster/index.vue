@@ -14,49 +14,43 @@
       variant="danger"
       class="mt-3"
       :key="error"
-      >{{ error.msg }}</b-alert
-    >
+    >{{ error.msg }}</b-alert>
     <b-spinner v-if="loadingCards" label="Spinning"></b-spinner>
     <template v-else>
-      <b-card
-        v-for="item in items"
-        :key="item._id"
-        :title="item.name"
-        class="my-3"
-      >
-        <b-card-text>
-          <p>
-            <span class="font-weight-bold">Picker Name:</span>
-            {{ item.pickerName }}
-          </p>
-        </b-card-text>
-        <b-card-text>
-          <p>
-            <span class="font-weight-bold">Picker E-mail:</span>
-            {{ item.pickerEmail }}
-          </p>
-        </b-card-text>
-        <b-card-text>
-          <p>
-            <span class="font-weight-bold">Pick Up Date:</span>
-            {{ formatDate(item.pickUpDate) }}
-          </p>
-        </b-card-text>
-        <b-card-text>
-          <p>
-            <span class="font-weight-bold">Created at:</span>
-            {{ formatDate(item.created_at) }}
-          </p>
-        </b-card-text>
-        <b-card-text>
-          <p>
-            <span class="font-weight-bold">Status:</span>
-            {{ item.states }}
-          </p>
-        </b-card-text>
-        <p class="d-none" id="itemId">{{ item._id }}</p>
-        <b-link class="card-link" @click.prevent="deleteItem">DELETE</b-link>
-      </b-card>
+      <table class="my-3 table">
+        <tr class="font-weight-bold">
+          <td>Item</td>
+          <td>Picker Name</td>
+          <td>Picker Email</td>
+          <td>Pick Up Date</td>
+          <td>Created At</td>
+          <td>Status</td>
+          <td>Actions</td>
+        </tr>
+        <tr
+          v-for="item in items"
+          :key="item._id"
+          :title="item.name"
+          class="align-middle"
+          :class="{'bg-secondary': isPicked(item.states)}"
+        >
+          <td>{{ item.name }}</td>
+          <td>{{ item.pickerName }}</td>
+          <td>{{ item.pickerEmail}}</td>
+          <td>{{ formatDate(item.pickUpDate) }}</td>
+          <td>{{ formatDate(item.created_at) }}</td>
+          <td>
+            {{item.states}}
+            <p class="d-none" id="itemId">{{ item._id }}</p>
+          </td>
+          <td>
+            <b-button-group vertical>
+              <b-button @click.prevent="deleteItem" variant="danger">Delete</b-button>
+              <b-button variant="success" :disabled="isPicked(item.states)">Picked</b-button>
+            </b-button-group>
+          </td>
+        </tr>
+      </table>
     </template>
   </div>
 </template>
@@ -96,7 +90,7 @@ export default {
     },
     async deleteItem(event) {
       this.errors = null;
-      const card = event.target.parentNode.parentNode;
+      const card = event.target.parentNode.parentNode.parentNode;
       const itemId = document.querySelector("#itemId").innerHTML;
       try {
         await this.$store.dispatch("deleteItem", itemId);
@@ -110,7 +104,13 @@ export default {
       }
     },
     formatDate(date) {
-      return moment(date).format("LLLL");
+      return moment(date).format("MMM, d, H:mm");
+    },
+    isPicked(status) {
+      if (status === "picked") {
+        return true;
+      }
+      return false;
     }
   },
   beforeMount() {
@@ -120,4 +120,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+td {
+  vertical-align: middle;
+}
+</style>
