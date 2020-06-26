@@ -43,6 +43,12 @@
       </b-card-text>
       <b-card-text>
         <p>
+          <span class="font-weight-bold">Pick Up Date:</span>
+          {{ item.created_at }}
+        </p>
+      </b-card-text>
+      <b-card-text>
+        <p>
           <span class="font-weight-bold">Status:</span>
           {{ item.states }}
         </p>

@@ -33,7 +33,16 @@ export const postCreateItem = async (
       to: pickerEmail,
       from: 'dcca12@gmail.com',
       subject: `You need to get the item: ${item.name}`,
-      text: `You have been selected to the get the item ${item.name} on the following date ${item.pickUpDate}:`,
+      html: `
+        <h1>Get the item: ${item.name}</h1>
+        <p>You have been selected to the get:</p>
+        <ul>
+          <li>Item: ${item.name}</li>
+          <li>Pick Up Date: ${item.pickUpDate}</li>
+        </ul>
+        <a href='http://localhost:3000'>Confirm</a>
+        <a href='http://localhost:3000' >Change Date</a>
+        `,
     };
     sgMail.send(msg);
     await user.save();
