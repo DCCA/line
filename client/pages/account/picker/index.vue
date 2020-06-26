@@ -46,6 +46,8 @@ export default {
     async onSubmit(evt) {
       this.errors = null;
       evt.preventDefault();
+      // Search for items with that e-mail
+      // Return the items so the user can confirm or reject
     },
     onReset(evt) {
       this.errors = null;

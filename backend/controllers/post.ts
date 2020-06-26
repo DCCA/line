@@ -30,9 +30,10 @@ export const postCreateItem = async (
     const savedItem = await item.save();
     user.items.push(savedItem._id);
     const msg = {
-      to: pickerEmail,
+      // to: pickerEmail,
+      to: 'dcca12@gmail.com',
       from: 'dcca12@gmail.com',
-      subject: `You need to get the item: ${item.name}`,
+      subject: `You need to get the item: ${item.name} | Homolog: ${item.pickerEmail}`,
       html: `
         <h1>Get the item: ${item.name}</h1>
         <p>You have been selected to the get:</p>
